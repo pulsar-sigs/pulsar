@@ -41,5 +41,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - name: login to container registry
+        run: docker login ghcr.io -u pulsar-sigs -p ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker
-        run: cd build/docker && docker build -t ghcr.io/pulsar-sigs/pulsar:rocksdb .
+        run: cd build/docker && docker build -t ghcr.io/pulsar-sigs/pulsar:rocksdb . && docker push ghcr.io/pulsar-sigs/pulsar:rocksdb
