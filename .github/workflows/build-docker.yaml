@@ -42,4 +42,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker
-        uses: cd build/docker && docker build -t ghcr.io/pulsar-sigs/pulsar:rocksdb .
+        run: cd build/docker && docker build -t ghcr.io/pulsar-sigs/pulsar:rocksdb .
