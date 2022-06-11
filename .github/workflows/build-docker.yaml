@@ -45,4 +45,4 @@ jobs:
         run: docker login ghcr.io -u pulsar-sigs -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker
-        run: cd build/docker && sh build_java_test_image.sh && docker images
+        run: cd build && sh build_java_test_image.sh && docker images
