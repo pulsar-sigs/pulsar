@@ -1591,6 +1591,9 @@ public class PulsarService implements AutoCloseable, ShutdownService {
                 getInternalConfigurationData()
             );
 
+            LOG.info("authenticationService:{}",authenticationService);
+            LOG.info("authorizationService:{}",authorizationService);
+
             // TODO figure out how to handle errors from function worker service
             functionWorkerService.get().start(
                 authenticationService,

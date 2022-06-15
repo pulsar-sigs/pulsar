@@ -1466,9 +1466,11 @@ public class PersistentTopic extends AbstractTopic implements Topic, AddEntryCal
                             ? ledger.getTotalSize()
                             : ledger.getEstimatedBacklogSize();
                 }
+                log.info("lan.compaction:{}|{}|{}",topic,backlogEstimate,compactionThreshold);
 
                 if (backlogEstimate > compactionThreshold) {
                     try {
+                        log.info("lan.compaction.trigger:{}|{}|{}",topic,backlogEstimate,compactionThreshold);
                         triggerCompaction();
                     } catch (AlreadyRunningException are) {
                         log.debug("[{}] Compaction already running, so don't trigger again, "

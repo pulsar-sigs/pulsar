@@ -48,7 +48,8 @@ public class AuthenticationProviderBasic implements AuthenticationProvider {
 
     @Override
     public void initialize(ServiceConfiguration config) throws IOException {
-        File confFile = new File(System.getProperty(CONF_SYSTEM_PROPERTY_KEY));
+        String property = System.getProperty(CONF_SYSTEM_PROPERTY_KEY);
+        File confFile = new File(property);
         if (!confFile.exists()) {
             throw new IOException("The password auth conf file does not exist");
         } else if (!confFile.isFile()) {

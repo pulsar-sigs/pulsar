@@ -164,6 +164,7 @@ public abstract class AbstractMetadataStore implements MetadataStoreExtended, Co
         if (!isValidPath(path)) {
             return FutureUtil.failedFuture(new MetadataStoreException.InvalidPathException(path));
         }
+        log.info("lan.dev.childrenCache:{}",childrenCache);
         return childrenCache.get(path);
     }
 
@@ -263,6 +264,7 @@ public abstract class AbstractMetadataStore implements MetadataStoreExtended, Co
     @Override
     public final CompletableFuture<Stat> put(String path, byte[] data, Optional<Long> optExpectedVersion,
             EnumSet<CreateOption> options) {
+        //lan.dev /managed-ledgers/ public/default/test /persistent/test3
         if (!isValidPath(path)) {
             return FutureUtil.failedFuture(new MetadataStoreException.InvalidPathException(path));
         }

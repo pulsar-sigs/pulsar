@@ -230,6 +230,7 @@ public class LinuxInfoUtils {
     }
 
     private static String readTrimStringFromFile(Path path) throws IOException {
+        System.out.println("readTrimStringFromFile:"+path);
         return new String(Files.readAllBytes(path), Charsets.UTF_8).trim();
     }
 

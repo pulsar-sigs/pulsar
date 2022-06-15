@@ -1407,7 +1407,10 @@ public class BrokerService implements Closeable {
             managedLedgerConfig.setProperties(properties);
 
             // Once we have the configuration, we can proceed with the async open operation
-            managedLedgerFactory.asyncOpen(topicName.getPersistenceNamingEncoding(), managedLedgerConfig,
+
+            String encodingTopic = topicName.getPersistenceNamingEncoding();
+
+            managedLedgerFactory.asyncOpen(encodingTopic, managedLedgerConfig,
                     new OpenLedgerCallback() {
                         @Override
                         public void openLedgerComplete(ManagedLedger ledger, Object ctx) {

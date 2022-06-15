@@ -1562,7 +1562,8 @@ flexible messaging model and an intuitive client API.</description>
             <pulsar-client>SCRIPT_STYLE</pulsar-client>
             <bookkeeper>SCRIPT_STYLE</bookkeeper>
             <tfvars>SCRIPT_STYLE</tfvars>
-          </mapping>
+    </mapping>
+	     <skip>true</skip>
         </configuration>
         <executions>
           <execution>
@@ -2131,7 +2132,7 @@ flexible messaging model and an intuitive client API.</description>
         <!-- all these 3 modules should be put at the end in this exact sequence -->
         <module>distribution</module>
         <module>docker</module>
-        <module>tests</module>
+<!--        <module>tests</module>-->
       </modules>
     </profile>
 
