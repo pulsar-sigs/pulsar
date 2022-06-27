@@ -16,14 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.pulsar.stats;
+package org.apache.pulsar.client.admin;
 
-import lombok.experimental.UtilityClass;
+public enum Mode {
 
-@UtilityClass
-public class CacheMetricsCollector {
+    PERSISTENT(0), NON_PERSISTENT(1), ALL(2),;
+    private final int value;
+    private Mode(int value) {
+        this.value = value;
+    }
+    public int getValue() {
+        return value;
+    }
+    public static Mode valueOf(int n) {
+        switch (n) {
+            case 0 :
+                return PERSISTENT;
+            case 1 :
+                return NON_PERSISTENT;
+            case 2 :
+                return ALL;
+            default :
+                return null;
 
-    public static final io.prometheus.client.cache.caffeine.CacheMetricsCollector CAFFEINE =
-            new io.prometheus.client.cache.caffeine.CacheMetricsCollector()
-            .register();
+        }
+    }
 }
