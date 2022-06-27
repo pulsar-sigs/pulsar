@@ -2060,7 +2060,13 @@ public class BrokerService implements Closeable {
                     }
                     Map<String, String> data = optMap.get();
                     data.forEach((configKey, value) -> {
+//                        log.info("dynamicConfigurationMap.brokerClientAuthenticationPlugin:{}",dynamicConfigurationMap.get("brokerClientAuthenticationPlugin"));
                         Field configField = dynamicConfigurationMap.get(configKey).field;
+                        try {
+                            log.info("dynamicConfigurationMap.brokerClientAuthenticationPlugin:{}", configField.get(pulsar.getConfiguration()).toString());
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
                         Object newValue = FieldParser.value(data.get(configKey), configField);
                         if (configField != null) {
                             Consumer listener = configRegisteredListeners.get(configKey);
@@ -2572,6 +2578,7 @@ public class BrokerService implements Closeable {
                 field.setAccessible(true);
                 try {
                     Object configValue = field.get(pulsar.getConfiguration());
+                    log.info("field.getName():{}|{}|{}",field.getName(),configValue == null,configValue);
                     runtimeConfigurationMap.put(field.getName(), configValue == null ? "" : configValue);
                 } catch (Exception e) {
                     log.error("Failed to get value of field {}, {}", field.getName(), e.getMessage());
