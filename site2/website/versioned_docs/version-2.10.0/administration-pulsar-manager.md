@@ -35,7 +35,7 @@ docker run -it \
 ### Configure Database or JWT authentication
 ####  Configure Database (optional)
 
-If you have a large amount of data, you can use a custom database, otherwise, some display errors may occur, such as the topic information cannot be displayed when the topic exceeds 10000.
+If you have a large amount of data, you can use a custom database. Otherwise, some display errors may occur. For example, the topic information cannot be displayed when the topic exceeds 10000.
 The following is an example of PostgreSQL.
 
 1. Initialize database and table structures using the [file](https://github.com/apache/pulsar-manager/blob/master/src/main/resources/META-INF/sql/postgresql-schema.sql).
@@ -132,7 +132,7 @@ The request parameter in curl command:
 
 
 ### Configure the environment
-1. Login to the system, Visit http://localhost:9527 to login.  The current default account is  `admin/apachepulsar`
+1. Login to the system, Visit http://localhost:9527 to login. The current default account is  `admin/apachepulsar`
 
 2. Click "New Environment" button to add an environment.
 
@@ -146,7 +146,7 @@ The request parameter in curl command:
 
 When using binary packages for direct deployment, you can follow these steps.
 
-- Download and unzip the binary package, which is available on the [Pulsar Download](download) page.
+- Download and unzip the binary package, which is available on the [Pulsar Download](/download) page.
 
   ```bash
   
