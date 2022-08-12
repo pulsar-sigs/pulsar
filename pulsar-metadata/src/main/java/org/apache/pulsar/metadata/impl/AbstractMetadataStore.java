@@ -253,7 +253,7 @@ public abstract class AbstractMetadataStore implements MetadataStoreExtended, Co
         if (!isValidPath(path)) {
             return FutureUtil.failedFuture(new MetadataStoreException.InvalidPathException(path));
         }
-        log.info("lan.dev.childrenCache:{}",childrenCache);
+//        log.info("lan.dev.childrenCache:{}",childrenCache);
         return childrenCache.get(path);
     }
 

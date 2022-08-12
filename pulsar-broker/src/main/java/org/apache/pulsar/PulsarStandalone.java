@@ -290,7 +290,8 @@ public class PulsarStandalone implements AutoCloseable {
 
         if (!this.isOnlyBroker()) {
             if (usingNewDefaultsPIP117) {
-                startBookieWithRocksDB();
+//                startBookieWithRocksDB();
+                startBookieWithMetadata("etcd://127.0.0.1:2379");
             } else {
                 startBookieWithZookeeper();
             }
@@ -434,10 +435,13 @@ public class PulsarStandalone implements AutoCloseable {
         }
     }
 
-
     private void startBookieWithRocksDB() throws Exception {
         log.info("Starting BK with RocksDb metadata store");
         String metadataStoreUrl = "rocksdb://" + Paths.get(metadataDir).toAbsolutePath();
+        startBookieWithMetadata(metadataStoreUrl);
+    }
+
+    private void startBookieWithMetadata(String metadataStoreUrl) throws Exception {
         bkCluster = BKCluster.builder()
                 .metadataServiceUri(metadataStoreUrl)
                 .bkPort(bkPort)
