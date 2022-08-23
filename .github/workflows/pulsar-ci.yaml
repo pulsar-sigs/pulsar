@@ -325,10 +325,21 @@ jobs:
           -Dmaven.test.skip=true -Ddockerfile.build.squash=true -DskipSourceReleaseAssembly=true \
           -Dspotbugs.skip=true  -Dlicense.skip=true -Dcheckstyle.skip=true -Drat.skip=true
 
-      - name: save docker image apachepulsar/java-test-image:latest to Github artifact cache
-        if: ${{ needs.changed_files_job.outputs.docs_only != 'true' && needs.changed_files_job.outputs.cpp_only != 'true' }}
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=today::$(date +'%Y-%m-%d')"
+        
+      - name: save docker image apachepulsar/pulsar-test-latest-version:latest to Github artifact cache
+        if: ${{ needs.changed_files_job.outputs.docs_only != 'true' }}
         run: |
-          $GITHUB_WORKSPACE/build/pulsar_ci_tool.sh docker_save_image_to_github_actions_artifacts apachepulsar/java-test-image:latest pulsar-java-test-image
+          $GITHUB_WORKSPACE/build/pulsar_ci_tool.sh docker_save_image_to_github_actions_artifacts apachepulsar/pulsar-test-latest-version:latest pulsar-test-latest-version-image
+          docker tag apachepulsar/pulsar-test-latest-version:latest ghcr.io/pulsar-sigs/pulsar:${{ steps.date.outputs.today }}-standalone-with-meatadata
+          docker login ghcr.io -u liangyuanpeng -p ${{ secrets.GITHUB_TOKEN }}
+          docker push ghcr.io/pulsar-sigs/pulsar:${{ steps.date.outputs.today }}-standalone-with-meatadata
+          docker tag ghcr.io/pulsar-sigs/pulsar:${{ steps.date.outputs.today }}-standalone-with-meatadata lypgcs/pulsar:${{ steps.date.outputs.today }}-standalone-with-meatadata
+          docker login  -u lypgcs -p ${{ secrets.DOCKERHUB_PASSWD }}
+          docker push lypgcs/pulsar:${{ steps.date.outputs.today }}-standalone-with-meatadata
+          docker images
 
       - name: Wait for ssh connection when build fails
         # ssh access is enabled for builds in own forks
