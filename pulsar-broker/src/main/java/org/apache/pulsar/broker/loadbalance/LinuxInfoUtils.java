@@ -18,8 +18,8 @@
  */
 package org.apache.pulsar.broker.loadbalance;
 
-import com.google.common.base.Charsets;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -232,7 +232,7 @@ public class LinuxInfoUtils {
 
     private static String readTrimStringFromFile(Path path) throws IOException {
         System.out.println("readTrimStringFromFile:"+path);
-        return new String(Files.readAllBytes(path), Charsets.UTF_8).trim();
+        return new String(Files.readAllBytes(path), StandardCharsets.UTF_8).trim();
     }
 
     private static long readLongFromFile(Path path) throws IOException {

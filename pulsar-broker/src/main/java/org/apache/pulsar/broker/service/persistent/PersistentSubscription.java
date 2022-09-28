@@ -373,6 +373,7 @@ public class PersistentSubscription extends AbstractSubscription implements Subs
 
     @Override
     public void acknowledgeMessage(List<Position> positions, AckType ackType, Map<String, Long> properties) {
+        cursor.updateLastActive();
         Position previousMarkDeletePosition = cursor.getMarkDeletedPosition();
 
         if (ackType == AckType.Cumulative) {
@@ -1065,6 +1066,7 @@ public class PersistentSubscription extends AbstractSubscription implements Subs
         subStats.lastMarkDeleteAdvancedTimestamp = lastMarkDeleteAdvancedTimestamp;
         subStats.bytesOutCounter = bytesOutFromRemovedConsumers.longValue();
         subStats.msgOutCounter = msgOutFromRemovedConsumer.longValue();
+
         Dispatcher dispatcher = this.dispatcher;
         if (dispatcher != null) {
             Map<Consumer, List<Range>> consumerKeyHashRanges = getType() == SubType.Key_Shared
@@ -1089,6 +1091,11 @@ public class PersistentSubscription extends AbstractSubscription implements Subs
                             .collect(Collectors.toList());
                 }
             });
+
+            subStats.filterProcessedMsgCount = dispatcher.getFilterProcessedMsgCount();
+            subStats.filterAcceptedMsgCount = dispatcher.getFilterAcceptedMsgCount();
+            subStats.filterRejectedMsgCount = dispatcher.getFilterRejectedMsgCount();
+            subStats.filterRescheduledMsgCount = dispatcher.getFilterRescheduledMsgCount();
         }
 
         SubType subType = getType();
@@ -1272,6 +1279,11 @@ public class PersistentSubscription extends AbstractSubscription implements Subs
     @VisibleForTesting
     public ManagedCursor getCursor() {
         return cursor;
+    }
+
+    @VisibleForTesting
+    public PendingAckHandle getPendingAckHandle() {
+        return pendingAckHandle;
     }
 
     public void syncBatchPositionBitSetForPendingAck(PositionImpl position) {

@@ -80,6 +80,10 @@ public class ManagedLedgerException extends Exception {
             super(new Exception("Attempted to use a fenced managed ledger"));
         }
 
+        public ManagedLedgerFencedException(String message) {
+            super(message);
+        }
+
         public ManagedLedgerFencedException(Exception e) {
             super(e);
         }
@@ -186,6 +190,13 @@ public class ManagedLedgerException extends Exception {
 
         public ConcurrentWaitCallbackException() {
             super("We can only have a single waiting callback");
+        }
+    }
+
+    public static class OffloadReadHandleClosedException extends ManagedLedgerException {
+
+        public OffloadReadHandleClosedException() {
+            super("Offload read handle already closed");
         }
     }
 

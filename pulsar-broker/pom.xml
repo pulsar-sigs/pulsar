@@ -339,6 +339,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.roaringbitmap</groupId>
+      <artifactId>RoaringBitmap</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>pulsar-functions-api-examples</artifactId>
       <version>${project.version}</version>
@@ -425,6 +430,34 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.gaul</groupId>
+        <artifactId>modernizer-maven-plugin</artifactId>
+        <configuration>
+          <failOnViolations>true</failOnViolations>
+          <javaVersion>17</javaVersion>
+          <ignorePackages>
+            <ignorePackage>org.apache.pulsar.broker.admin</ignorePackage>
+            <ignorePackage>org.apache.pulsar.broker.namespace</ignorePackage>
+            <ignorePackage>org.apache.pulsar.broker.service</ignorePackage>
+            <ignorePackage>org.apache.pulsar.broker.stats</ignorePackage>
+            <ignorePackage>org.apache.pulsar.client</ignorePackage>
+          </ignorePackages>
+          <exclusionPatterns>
+            <exclusionPattern>java/lang/StringBuffer."&lt;init&gt;":.*</exclusionPattern>
+          </exclusionPatterns>
+        </configuration>
+        <executions>
+          <execution>
+            <id>modernizer</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>modernizer</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -690,7 +723,7 @@
                   <springmvc>false</springmvc>
                   <locations>org.apache.pulsar.broker.lookup.v2</locations>
                   <schemes>http,https</schemes>
-                  <basePath>/lookup/v2</basePath>
+                  <basePath>/lookup</basePath>
                   <info>
                     <title>Pulsar Lookup REST API</title>
                     <version>v2</version>

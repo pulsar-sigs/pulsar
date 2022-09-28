@@ -25,6 +25,7 @@ ARG PULSAR_TARBALL
 
 ADD ${PULSAR_TARBALL} /
 RUN mv /apache-pulsar-* /pulsar
+RUN rm -rf /pulsar/bin/*.cmd
 
 COPY scripts/apply-config-from-env.py /pulsar/bin
 COPY scripts/apply-config-from-env-with-prefix.py /pulsar/bin
@@ -42,9 +43,9 @@ RUN for SUBDIRECTORY in conf data download logs; do \
      chmod -R g+w /pulsar/$SUBDIRECTORY; \
      done
 
-# Presto writes logs to this directory (at least during tests), so we need to give the process permission
-# to create those log directories. This should be removed when presto is removed.
-RUN chmod g+w /pulsar/lib/presto
+# Trino writes logs to this directory (at least during tests), so we need to give the process permission
+# to create those log directories. This should be removed when Trino is removed.
+RUN chmod g+w /pulsar/trino
 
 ### Create 2nd stage from Ubuntu image
 ### and add OpenJDK and Python dependencies (for Pulsar functions)
@@ -60,6 +61,7 @@ RUN sed -i "s|http://archive\.ubuntu\.com/ubuntu/|${UBUNTU_MIRROR:-mirror://mirr
      && apt-get update \
      && apt-get -y dist-upgrade \
 <<<<<<< HEAD
+<<<<<<< HEAD
      && apt-get -y install --no-install-recommends openjdk-11-jdk-headless \
 #                    netcat dnsutils less procps iputils-ping \
 #                 python3 python3-yaml python3-kazoo python3-pip \
@@ -70,6 +72,24 @@ RUN sed -i "s|http://archive\.ubuntu\.com/ubuntu/|${UBUNTU_MIRROR:-mirror://mirr
                  curl ca-certificates \
 >>>>>>> e6b12c64b043903eb5ff2dc5186fe8030f157cfc
      && apt-get -y --purge autoremove \
+=======
+     && apt-get -y install --no-install-recommends netcat dnsutils less procps iputils-ping \
+                 python3 python3-kazoo python3-pip \
+                 curl ca-certificates wget apt-transport-https
+
+# Install Eclipse Temurin Package
+RUN mkdir -p /etc/apt/keyrings \
+     && wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc \
+     && echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list \
+     && apt-get update \
+     && apt-get -y dist-upgrade \
+     && apt-get -y install temurin-17-jdk \
+     && export ARCH=$(uname -m | sed -r 's/aarch64/arm64/g' |  awk '!/arm64/{$0="amd64"}1') \
+     && echo networkaddress.cache.ttl=1 >> /usr/lib/jvm/temurin-17-jdk-$ARCH/conf/security/java.security \
+
+# Cleanup apt
+RUN apt-get -y --purge autoremove \
+>>>>>>> origin/master
      && apt-get autoclean \
      && apt-get clean \
      && rm -rf /var/lib/apt/lists/*
@@ -89,17 +109,19 @@ RUN pip3 install pyyaml==5.4.1
 RUN mkdir /pulsar && chmod g+w /pulsar
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 RUN echo networkaddress.cache.ttl=1 >> /usr/lib/jvm/java-11-openjdk-amd64/conf/security/java.security
 #ADD target/python-client/ /pulsar/pulsar-client
 =======
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 RUN echo networkaddress.cache.ttl=1 >> /usr/lib/jvm/java-17-openjdk-amd64/conf/security/java.security
+=======
+>>>>>>> origin/master
 ADD target/python-client/ /pulsar/pulsar-client
 >>>>>>> e6b12c64b043903eb5ff2dc5186fe8030f157cfc
 
 ENV PULSAR_ROOT_LOGGER=INFO,CONSOLE
-
 
 COPY --from=pulsar /pulsar /pulsar
 WORKDIR /pulsar

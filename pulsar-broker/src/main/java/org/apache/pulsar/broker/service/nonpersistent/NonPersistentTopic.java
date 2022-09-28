@@ -55,6 +55,7 @@ import org.apache.pulsar.broker.service.BrokerServiceException.TopicBusyExceptio
 import org.apache.pulsar.broker.service.BrokerServiceException.TopicFencedException;
 import org.apache.pulsar.broker.service.BrokerServiceException.UnsupportedVersionException;
 import org.apache.pulsar.broker.service.Consumer;
+import org.apache.pulsar.broker.service.Dispatcher;
 import org.apache.pulsar.broker.service.Producer;
 import org.apache.pulsar.broker.service.Replicator;
 import org.apache.pulsar.broker.service.StreamingStats;
@@ -419,7 +420,8 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
                     if (failIfHasSubscriptions) {
                         if (!subscriptions.isEmpty()) {
                             isFenced = false;
-                            deleteFuture.completeExceptionally(new TopicBusyException("Topic has subscriptions"));
+                            deleteFuture.completeExceptionally(
+                                    new TopicBusyException("Topic has subscriptions:" + subscriptions.keys()));
                             return;
                         }
                     } else {
@@ -437,7 +439,7 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
                             // topic GC iterates over topics map and removing from the map with the same thread creates
                             // deadlock. so, execute it in different thread
                             brokerService.executor().execute(() -> {
-                                brokerService.removeTopicFromCache(topic);
+                                brokerService.removeTopicFromCache(NonPersistentTopic.this);
                                 unregisterTopicPolicyListener();
                                 log.info("[{}] Topic deleted", topic);
                                 deleteFuture.complete(null);
@@ -495,6 +497,16 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
             this.resourceGroupPublishLimiter.unregisterRateLimitFunction(this.getName());
         }
 
+        if (entryFilters != null) {
+            entryFilters.forEach((name, filter) -> {
+                try {
+                    filter.close();
+                } catch (Exception e) {
+                    log.warn("Error shutting down entry filter {}", name, e);
+                }
+            });
+        }
+
         CompletableFuture<Void> clientCloseFuture =
                 closeWithoutWaitingClientDisconnect ? CompletableFuture.completedFuture(null)
                         : FutureUtil.waitForAll(futures);
@@ -504,7 +516,7 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
             // unload topic iterates over topics map and removing from the map with the same thread creates deadlock.
             // so, execute it in different thread
             brokerService.executor().execute(() -> {
-                brokerService.removeTopicFromCache(topic);
+                brokerService.removeTopicFromCache(NonPersistentTopic.this);
                 unregisterTopicPolicyListener();
                 closeFuture.complete(null);
             });
@@ -658,6 +670,11 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
     }
 
     @Override
+    public ConcurrentOpenHashMap<String, ? extends Replicator> getShadowReplicators() {
+        return ConcurrentOpenHashMap.emptyMap();
+    }
+
+    @Override
     public Subscription getSubscription(String subscription) {
         return subscriptions.get(subscription);
     }
@@ -748,6 +765,20 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
                 topicStatsStream.writePair("msgThroughputOut", subMsgThroughputOut);
                 topicStatsStream.writePair("msgRateRedeliver", subMsgRateRedeliver);
                 topicStatsStream.writePair("type", subscription.getTypeString());
+
+                // Write entry filter stats
+                Dispatcher dispatcher0 = subscription.getDispatcher();
+                if (null != dispatcher0) {
+                    topicStatsStream.writePair("filterProcessedMsgCount",
+                            dispatcher0.getFilterProcessedMsgCount());
+                    topicStatsStream.writePair("filterAcceptedMsgCount",
+                            dispatcher0.getFilterAcceptedMsgCount());
+                    topicStatsStream.writePair("filterRejectedMsgCount",
+                            dispatcher0.getFilterRejectedMsgCount());
+                    topicStatsStream.writePair("filterRescheduledMsgCount",
+                            dispatcher0.getFilterRescheduledMsgCount());
+                }
+
                 if (subscription.getDispatcher() != null) {
                     subscription.getDispatcher().getMessageDropRate().calculateRate();
                     topicStatsStream.writePair("msgDropRate",
@@ -869,6 +900,7 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
         });
 
         stats.topicEpoch = topicEpoch.orElse(null);
+        stats.ownerBroker = brokerService.pulsar().getLookupServiceAddress();
         future.complete(stats);
         return future;
     }
@@ -974,8 +1006,8 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
                         return;
                     }
                     if (System.currentTimeMillis() - sub.getLastActive() > expirationTimeMillis) {
-                        sub.delete().thenAccept(v -> log.info("[{}][{}] The subscription was deleted due to expiration",
-                                topic, subName));
+                        sub.delete().thenAccept(v -> log.info("[{}][{}] The subscription was deleted due to expiration "
+                                + "with last active [{}]", topic, subName, sub.getLastActive()));
                     }
                 });
             }
@@ -1062,6 +1094,11 @@ public class NonPersistentTopic extends AbstractTopic implements Topic, TopicPol
     @Override
     public boolean isReplicated() {
         return replicators.size() > 1;
+    }
+
+    @Override
+    public boolean isShadowReplicated() {
+        return false;
     }
 
     @Override

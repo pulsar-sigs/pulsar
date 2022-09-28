@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.bookkeeper.conf.ServerConfiguration;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
 import org.apache.pulsar.broker.PulsarService;
 import org.apache.pulsar.broker.ServiceConfiguration;
 import org.apache.pulsar.broker.resources.ClusterResources;
@@ -42,6 +41,7 @@ import org.apache.pulsar.common.partition.PartitionedTopicMetadata;
 import org.apache.pulsar.common.policies.data.ClusterData;
 import org.apache.pulsar.common.policies.data.Policies;
 import org.apache.pulsar.common.policies.data.TenantInfo;
+import org.apache.pulsar.common.util.ShutdownUtil;
 import org.apache.pulsar.functions.instance.state.PulsarMetadataStateStoreProviderImpl;
 import org.apache.pulsar.functions.worker.WorkerConfig;
 import org.apache.pulsar.functions.worker.WorkerService;
@@ -290,8 +290,8 @@ public class PulsarStandalone implements AutoCloseable {
 
         if (!this.isOnlyBroker()) {
             if (usingNewDefaultsPIP117) {
-//                startBookieWithRocksDB();
-                startBookieWithMetadata("etcd://127.0.0.1:2379");
+                startBookieWithRocksDB();
+//                startBookieWithMetadata("etcd://127.0.0.1:2379");
             } else {
                 startBookieWithZookeeper();
             }
@@ -468,8 +468,7 @@ public class PulsarStandalone implements AutoCloseable {
 
     private static void processTerminator(int exitCode) {
         log.info("Halting standalone process with code {}", exitCode);
-        LogManager.shutdown();
-        Runtime.getRuntime().halt(exitCode);
+        ShutdownUtil.triggerImmediateForcefulShutdown(exitCode);
     }
 
 
