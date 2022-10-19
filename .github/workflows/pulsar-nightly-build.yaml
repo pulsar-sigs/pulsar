@@ -42,7 +42,7 @@ jobs:
           distribution: 'temurin'
 
       - name: run install
-        run: mvn clean install -DskipTests -Dcheckstyle.skip -Dmaven.test.skip=true -Denforcer.skip=true -Dlicense.skip=true -Dspotbugs.skip=true
+        run: mvn clean install -DskipTests -Dcheckstyle.skip -Denforcer.skip=true -Dlicense.skip=true -Dspotbugs.skip=true
 
       - name: run build image
         run: mvn -B -am -pl tests/docker-images/java-test-image install -Pcore-modules,-main,integrationTests,docker           -Dmaven.test.skip=true -Ddocker.squash=true -DskipSourceReleaseAssembly=true           -Dspotbugs.skip=true  -Dlicense.skip=true -Dcheckstyle.skip=true -Drat.skip=true
