@@ -19,7 +19,7 @@
 package org.apache.pulsar.compaction;
 
 import java.util.concurrent.CompletableFuture;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.apache.pulsar.broker.PulsarService;
 import org.apache.pulsar.common.classification.InterfaceAudience;
 import org.apache.pulsar.common.classification.InterfaceStability;

@@ -21,7 +21,7 @@ package org.apache.pulsar.broker.service;
 import com.google.common.annotations.VisibleForTesting;
 import io.netty.buffer.ByteBuf;
 import java.nio.charset.StandardCharsets;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import org.apache.bookkeeper.mledger.Entry;
 import org.apache.bookkeeper.mledger.Position;

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableSet;
 import java.util.Set;
-import javax.annotation.concurrent.NotThreadSafe;
+import jakarta.annotation.concurrent.NotThreadSafe;
 import org.apache.bookkeeper.mledger.impl.PositionImpl;
 import org.apache.bookkeeper.util.collections.ConcurrentLongLongHashMap;
 import org.apache.pulsar.common.util.collections.ConcurrentLongLongPairHashMap;

@@ -20,7 +20,7 @@ package org.apache.pulsar.compaction;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.apache.bookkeeper.mledger.Entry;
 import org.apache.bookkeeper.mledger.Position;
 import org.apache.pulsar.common.classification.InterfaceAudience;
