@@ -62,8 +62,8 @@
       <version>${jclouds.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>javax.annotation-api</artifactId>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
   </dependencies>
 
@@ -102,7 +102,7 @@
                   <include>net.iharder:*</include>
                   <include>aopalliance:*</include>
                   <include>javax.inject:*</include>
-                  <include>javax.annotation:*</include>
+                  <include>jakarta.annotation:*</include>
                   <include>com.google.errorprone:*</include>
                 </includes>
               </artifactSet>
@@ -133,8 +133,8 @@
                   <shadedPattern>org.apache.pulsar.jcloud.shade.javax.inject</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>javax.annotation</pattern>
-                  <shadedPattern>org.apache.pulsar.jcloud.shade.javax.annotation</shadedPattern>
+                  <pattern>jakarta.annotation</pattern>
+                  <shadedPattern>org.apache.pulsar.jcloud.shade.jakarta.annotation</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.google.errorprone</pattern>
