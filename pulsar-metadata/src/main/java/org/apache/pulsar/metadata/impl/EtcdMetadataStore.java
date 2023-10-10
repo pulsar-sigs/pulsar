@@ -109,9 +109,10 @@ public class EtcdMetadataStore extends AbstractBatchedMetadataStore {
         try {
             this.client = newEtcdClient(metadataURL, conf);
             this.kv = client.getKVClient();
-            this.client.getWatchClient().watch(ByteSequence.from("/", StandardCharsets.UTF_8),
+            this.client.getWatchClient().watch(ByteSequence.from("\0", StandardCharsets.UTF_8),
                     WatchOption.newBuilder()
                             .isPrefix(true)
+                            .withRange(ByteSequence.from("/", StandardCharsets.UTF_8))
                             .build(), this::handleWatchResponse);
             if (enableSessionWatcher) {
                 this.sessionWatcher =
