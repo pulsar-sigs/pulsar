@@ -18,7 +18,7 @@
  */
 package org.apache.pulsar.broker.delayed.bucket;
 
-import javax.annotation.concurrent.NotThreadSafe;
+import jakarta.annotation.concurrent.NotThreadSafe;
 import org.apache.pulsar.broker.delayed.proto.DelayedIndex;
 import org.apache.pulsar.common.util.collections.TripleLongPriorityQueue;
 

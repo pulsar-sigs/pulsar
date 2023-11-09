@@ -22,7 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
-import javax.annotation.concurrent.NotThreadSafe;
+import jakarta.annotation.concurrent.NotThreadSafe;
 import lombok.AllArgsConstructor;
 import org.apache.pulsar.broker.delayed.proto.DelayedIndex;
 import org.apache.pulsar.broker.delayed.proto.SnapshotSegment;

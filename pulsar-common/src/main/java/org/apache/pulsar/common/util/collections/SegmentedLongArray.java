@@ -21,7 +21,7 @@ package org.apache.pulsar.common.util.collections;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.concurrent.NotThreadSafe;
+import jakarta.annotation.concurrent.NotThreadSafe;
 import lombok.Getter;
 import org.apache.pulsar.common.allocator.PulsarByteBufAllocator;
 

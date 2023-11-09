@@ -22,9 +22,9 @@ import static java.util.Objects.requireNonNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.function.Predicate;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.ThreadSafe;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import jakarta.annotation.concurrent.ThreadSafe;
 
 /**
  * Static convenience URI checker.

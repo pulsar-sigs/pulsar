@@ -110,9 +110,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>${javax.annotation-api.version}</version>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta.annotation-api.version}</version>
         </dependency>
 
         <dependency>
@@ -183,7 +183,7 @@
 
                                     <include>org.glassfish.jersey*:*</include>
                                     <include>javax.ws.rs:*</include>
-                                    <include>javax.annotation:*</include>
+                                    <include>jakarta.annotation:*</include>
                                     <include>org.glassfish.hk2*:*</include>
 
                                     <include>org.eclipse.jetty:*</include>
@@ -212,8 +212,8 @@
                                     <shadedPattern>org.apache.pulsar.shade.javax.ws</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>javax.annotation</pattern>
-                                    <shadedPattern>org.apache.pulsar.shade.javax.annotation</shadedPattern>
+                                    <pattern>jakarta.annotation</pattern>
+                                    <shadedPattern>org.apache.pulsar.shade.jakarta.annotation</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>jersey</pattern>

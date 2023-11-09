@@ -333,8 +333,8 @@
                                     <shadedPattern>org.apache.pulsar.functions.runtime.shaded.org.xerial.snappy</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>javax.annotation</pattern>
-                                    <shadedPattern>org.apache.pulsar.functions.runtime.shaded.javax.annotation</shadedPattern>
+                                    <pattern>jakarta.annotation</pattern>
+                                    <shadedPattern>org.apache.pulsar.functions.runtime.shaded.jakarta.annotation</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.checkerframework</pattern>

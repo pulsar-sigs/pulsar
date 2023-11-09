@@ -283,8 +283,8 @@
                   <shadedPattern>org.apache.pulsar.shade.javax.ws</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>javax.annotation</pattern>
-                  <shadedPattern>org.apache.pulsar.shade.javax.annotation</shadedPattern>
+                  <pattern>jakarta.annotation</pattern>
+                  <shadedPattern>org.apache.pulsar.shade.jakarta.annotation</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>javax.xml.bind</pattern>
@@ -380,8 +380,8 @@
                   <shadedPattern>org.apache.pulsar.shade.org.checkerframework</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>javax.annotation</pattern>
-                  <shadedPattern>org.apache.pulsar.shade.javax.annotation</shadedPattern>
+                  <pattern>jakarta.annotation</pattern>
+                  <shadedPattern>org.apache.pulsar.shade.jakarta.annotation</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.tukaani</pattern>
